@@ -175,6 +175,23 @@ class Cites(unittest.TestCase):
         self.assertIn(("paragraph", "§ 3 ust. 2"), texts)
         self.assertFalse(any(k == "paragraph" and t.startswith("§ 1") for k, t in texts))  # part of art. 481 § 1
 
+    def test_docx_runs_and_superscripts(self):
+        import tempfile
+        import zipfile
+        run = '<w:r>{props}<w:t xml:space="preserve">{text}</w:t></w:r>'
+        sup = '<w:rPr><w:vertAlign w:val="superscript"/></w:rPr>'
+        body = ("<w:p>" + run.format(props="", text="zgodnie z art. 481") + run.format(props="", text=" § 1 k.c. oraz art. 449")
+                + run.format(props=sup, text="1") + run.format(props="", text=" § 1 k.c.") + "</w:p>")
+        xml = ('<?xml version="1.0"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+               f"<w:body>{body}</w:body></w:document>")
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "letter.docx"
+            with zipfile.ZipFile(path, "w") as z:
+                z.writestr("word/document.xml", xml)
+            found = [c["text"] for c in eli.cmd_cites(args(file=str(path)))["citations"] if c["kind"] == "article"]
+        self.assertEqual(found, ["art. 481 § 1", "art. 449^1 § 1"])
+        self.assertEqual(eli.parse_article("449^1"), ("449", "1"))
+
 
 if __name__ == "__main__":
     unittest.main()

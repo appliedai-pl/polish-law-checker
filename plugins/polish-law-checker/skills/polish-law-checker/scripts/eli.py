@@ -741,8 +741,17 @@ def document_lines(path: Path) -> list[str]:
     if suffix == ".docx":
         with zipfile.ZipFile(path) as z:
             xml = z.read("word/document.xml").decode("utf-8")
-        paras = re.findall(r"<w:p[ >].*?</w:p>", xml, re.S)
-        return [html.unescape("".join(re.findall(r"<w:t[^>]*>(.*?)</w:t>", p, re.S))) for p in paras]
+        out = []
+        for para in re.findall(r"<w:p[ >].*?</w:p>", xml, re.S):
+            text = ""
+            for run in re.findall(r"<w:r[ >].*?</w:r>", para, re.S):
+                t = "".join(re.findall(r"<w:t[^>]*>(.*?)</w:t>", run, re.S))
+                # A superscript run ("449" + superscript "1") is kept as 449^1, not read as 4491.
+                if re.search(r'<w:vertAlign w:val="superscript"', run) and re.fullmatch(r"\d+", t):
+                    t = "^" + t
+                text += t
+            out.append(html.unescape(text))
+        return out
     if suffix == ".pdf":
         return "\n".join(pdf_pages(path.read_bytes())).splitlines()
     return path.read_text(encoding="utf-8", errors="replace").splitlines()
