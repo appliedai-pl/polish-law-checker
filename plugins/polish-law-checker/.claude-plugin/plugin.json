@@ -1,0 +1,13 @@
+{
+  "name": "polish-law-checker",
+  "version": "1.0.0",
+  "description": "Check every Polish-law citation in a document against the official text from the Sejm's ELI API: latest consolidated text, changes since, articles word for word.",
+  "author": {
+    "name": "Applied AI (Paweł Rojek, Piotr Rojek)",
+    "url": "https://appliedai.dev"
+  },
+  "homepage": "https://github.com/appliedai-pl/polish-law-checker",
+  "repository": "https://github.com/appliedai-pl/polish-law-checker",
+  "license": "MIT",
+  "keywords": ["polish-law", "legal", "citations", "sejm", "eli", "dziennik-ustaw"]
+}

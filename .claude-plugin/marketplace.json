@@ -1,0 +1,15 @@
+{
+  "name": "appliedai",
+  "description": "Claude Code plugins by Applied AI",
+  "owner": {
+    "name": "Applied AI",
+    "url": "https://appliedai.dev"
+  },
+  "plugins": [
+    {
+      "name": "polish-law-checker",
+      "source": "./plugins/polish-law-checker",
+      "description": "Check every Polish-law citation in a document against the official text from the Sejm's ELI API: latest consolidated text, changes since, articles word for word."
+    }
+  ]
+}
