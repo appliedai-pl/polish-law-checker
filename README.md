@@ -49,6 +49,14 @@ Footnotes on this article (where its wording comes from):
 
 The report Claude writes has one row per citation: what it was checked against, the result (OK, outdated text, wrong unit, doesn't say that, misquoted, not in force, changed since, not found, not verified), the quoted evidence with its source, and the fix.
 
+On the sample letter in `tests/fixtures/draft.md`, a made-up payment demand with planted mistakes, a run with Claude Sonnet on 20 October 2026 reported:
+
+- both consolidated texts out of date (the late-payments act cited as Dz. U. z 2022 r. poz. 893, the Civil Code as Dz. U. z 2025 r. poz. 1071), with the current citations;
+- "art. 4491" not found, with a pointer to art. 449¹ (a superscript lost in Word);
+- art. 449¹ § 2 cited for producer liability, which is in § 1 (§ 2 defines a product);
+- art. 13 ust. 1 cited as making a 90-day payment term void, while the rule for payment terms is in ust. 2, and it substitutes 60 days rather than voiding the clause;
+- the contract's own § 3 listed as not verifiable, since it isn't law.
+
 ## How it reads the law
 
 - **Metadata:** every act's metadata comes from `api.sejm.gov.pl/eli/acts/DU/<year>/<position>`: status, consolidated texts, amending acts with the date each change takes effect, Tribunal rulings. It is fetched fresh on every run.
